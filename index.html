@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Page</title>
+</head>
+<body>
+
+    <h2>Register User</h2>
+    <input type="text" id="usernameInput" placeholder="Enter username">
+     <input type="text" id="passwordInput" placeholder="Enter password">
+    <button onclick= "sendData()">Submit</button>
+
+    <script>
+        async function sendData() {
+            const userTypedUsername = document.getElementById("usernameInput").value;
+
+            const userTypedPassword = document.getElementById("passwordInput").value;
+
+            const userDataObject = {
+                username: userTypedUsername,
+                password: userTypedPassword
+            }
+
+            const jsonText = JSON.stringify(userDataObject);
+            const response = await fetch('http://localhost:3000/register', {
+                method: 'POST',
+                headers: {'Content-type': 'application/json'},
+                body: jsonText
+            })
+
+            
+        }
+    </script>
+</body>
+</html>
