@@ -19,25 +19,27 @@ app.use(express.json());
 
 
 app.get('/home', (req, res) => {
-    res.send('<h1>REGISTRATION</h1>');
-    res.sendFile(path.join(__dirname, 'index.html'))
+    res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 app.post('/register', async (req, res) => {
-    const { username, password } = req.body;
-
-    if (!username || !password) {
-        return res.status(400).json({ error: 'Username and password are required.' });
-    }
+    const { name, email, department, time } = req.body;
 
     try {
-        const query = 'INSERT INTO users(username, password) VALUES($1, $2) RETURNING id';
-        const result = await pool.query(query, [username, password]);
+        const query = 'INSERT INTO users(name, email, department) VALUES($1, $2, $3) RETURNING id';
+        const countCheck = await pool.query('select count(*) from users');
+        const totalRegistrations = parseInt(countCheck.rows[0].count);
+
+        if(totalRegistrations>=50){
+            return res.status(400).json({ error: 'Registration limit of 50 users has been reached.' })
+        }
+
+        const result = await pool.query(query, [name, email, department]);
 
         res.status(201).json({
-            message: 'Successfully registered user',
+            message: `Successfully registered ${name}`,
             userId: result.rows[0].id,
-            username,
+            name,
         });
 
     } catch (err) {
@@ -46,6 +48,13 @@ app.post('/register', async (req, res) => {
     }
 });
 
+app.get('/registrations/:id', async (req,res)=>{
+    const{id} = req.params;
+    const query = `select * from users where id = $1`;
+    const result = await pool.query(query, [id]);
+    res.status(200).json(result.rows[0]);
+
+});
 app.listen(PORT, () => {
     console.log(`server is running in PORT: ${PORT}`);
 });

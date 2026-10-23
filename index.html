@@ -8,19 +8,26 @@
 <body>
 
     <h2>Register User</h2>
-    <input type="text" id="usernameInput" placeholder="Enter username">
-     <input type="text" id="passwordInput" placeholder="Enter password">
+    <input type="text" id="nameInput" placeholder="Enter name">
+     <input type="text" id="emailInput" placeholder="Enter email">
+     <input type="text" id = "collegeInput" placeholder="Enter department in college">
+     
+
     <button onclick= "sendData()">Submit</button>
 
     <script>
         async function sendData() {
-            const userTypedUsername = document.getElementById("usernameInput").value;
+            const userTypedName = document.getElementById("nameInput").value;
 
-            const userTypedPassword = document.getElementById("passwordInput").value;
+            const userTypedEmail = document.getElementById("emailInput").value;
+
+            const userTypedCollege = document.getElementById("collegeInput").value;
+
 
             const userDataObject = {
-                username: userTypedUsername,
-                password: userTypedPassword
+                name: userTypedName,
+                email: userTypedEmail,
+                department: userTypedCollege,
             }
 
             const jsonText = JSON.stringify(userDataObject);
@@ -29,8 +36,18 @@
                 headers: {'Content-type': 'application/json'},
                 body: jsonText
             })
+        }
 
-            
+            async function getRegistrationById(id){
+                try{
+                    const response = await fetch(`http://localhost:3000/registrations/${id}`);
+                    const data = await response.json();
+                    return data;
+                }
+
+                catch(err){
+                    console.error(err);
+            }
         }
     </script>
 </body>
