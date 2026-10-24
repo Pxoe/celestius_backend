@@ -1,0 +1,11 @@
+CREATE TABLE users (
+    name VARCHAR(30) NOT NULL,
+    email VARCHAR(50) NOT NULL,
+    department VARCHAR(25),
+	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+ALTER TABLE users ADD COLUMN id SERIAL PRIMARY KEY;
+
+
+SELECT * from users;
